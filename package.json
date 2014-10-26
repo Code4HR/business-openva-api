@@ -1,7 +1,7 @@
 {
   "name": "business-openva-api",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "An API for local Virginia businesses.",
   "keywords": [],
   "dependencies": {
@@ -33,5 +33,5 @@
     "url": "git://github.com/ryayak1460/business-openva-api.git"
   },
   "author": "ryayak1460",
-  "license": ""
+  "license": "AGPL-3.0"
 }
