@@ -1,3 +1,4 @@
-# business-openva-api
+business_openva_api
+===================
 
-a [Sails](http://sailsjs.org) application providing an API for local Virginia businesses.
+a [Sails](http://sailsjs.org) application providing the API for business.openva.com.

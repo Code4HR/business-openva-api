@@ -92,12 +92,26 @@ dump.rdb
 # related ecosystem.
 ################################################
 lib-cov
+
+# Coverage directory used by tools like istanbul
+coverage
+
 *.seed
+logs
 *.log
 *.out
+pids
 *.pid
 npm-debug.log
 
+# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+.grunt
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Users Environment Variables
+.lock-wscript
 
 
 
