@@ -1,0 +1,7 @@
+{
+  "port": 3000,
+  "elasticSearch": {
+    "host": "localhost",
+    "port": "9200"
+  }
+}
