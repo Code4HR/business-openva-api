@@ -3,12 +3,15 @@ var config = require('./config.json');
 var Hapi = require('hapi');
 var server = new Hapi.Server(config.port);
 
-server.pack.register({
+server.pack.register([{
 	plugin: require('elasticsearch-hapi-plugin'),
 	options: {
 		host: "http://" + config.elasticSearch.host + ":" + config.elasticSearch.port
+	}}, {
+	plugin: require('hapi-route-directory'),
+	options: {path: '/'}
 	}
-},
+],
 function (err) {
 	if (err) {
 		console.error('Failed to load plugin: ', err);
@@ -16,14 +19,6 @@ function (err) {
 });
 
 var es = server.plugins['elasticsearch-hapi-plugin'].es;
-
-server.route({
-	method: 'GET',
-	path: '/',
-	handler: function (request, reply) {
-		reply('Business!');
-	}
-});
 
 server.route({
 	method: 'GET',

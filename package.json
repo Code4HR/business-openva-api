@@ -6,6 +6,7 @@
   "dependencies": {
     "elasticsearch-hapi-plugin": "^0.2.0",
     "hapi": "^7.3.0",
+    "hapi-route-directory": "0.0.4",
     "joi": "^4.7.0",
     "qs": "^2.3.2"
   },
