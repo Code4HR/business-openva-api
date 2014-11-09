@@ -10,6 +10,8 @@ server.pack.register([{
 	}}, {
 	plugin: require('hapi-route-directory'),
 	options: {path: '/'}
+	}, {
+		plugin: require('lout')
 	}
 ],
 function (err) {
