@@ -4,14 +4,14 @@ var Hapi = require('hapi');
 var server = new Hapi.Server(config.port);
 var routes = require('./routes');
 
-server.pack.register([{
-	plugin: require('hapi-route-directory'),
-	options: {
-		path: '/',
-		lout: false
-	}
-	}, {
-		plugin: require('lout')
+server.pack.register([
+	{ plugin: require('lout') },
+	{
+		plugin: require('hapi-route-directory'),
+		options: {
+			path: '/',
+			lout: false
+		}
 	}
 ],
 function (err) {

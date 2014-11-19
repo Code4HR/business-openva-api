@@ -1,22 +1,18 @@
 var config = require('./config.json');
+var models = require('./models');
 
 var es = require('elasticsearch');
 var db = new es.Client(config.elasticSearch);
 
 module.exports = [
-    { method: 'GET', path: '/businesses', handler: getBusinesses},
-    { method: 'GET', path: '/amendments', handler: getAmendments},
-    { method: 'GET', path: '/mergers', handler: getMergers}
+    { method: 'GET', path: '/businesses', handler: getBusinesses, config: {validate: {query: models.businesses}}},
+    { method: 'GET', path: '/amendments', handler: getAmendments, config: {validate: {query: models.amendments}}},
+    { method: 'GET', path: '/mergers', handler: getMergers, config: {validate: {query: models.mergers}}},
+    { method: 'GET', path: '/officers', handler: getOfficers, config: {validate: {query: models.officers}}}
 ];
 
 function getBusinesses(request, reply) {
-    var search_terms = [];
-
-    for (var k in request.query) {
-        var term = {};
-        term[k] = request.query[k];
-        search_terms.push({match: term});
-    }
+    var search_terms = buildSearch(request.query);
 
     db.search({
         index: 'business',
@@ -43,11 +39,26 @@ function getBusinesses(request, reply) {
     });
 }
 
-function getAmendments(request) {
+function getAmendments(request, reply) {
 
 }
 
-function getMergers(request) {
+function getMergers(request, reply) {
 
 }
 
+function getOfficers(request, reply) {
+
+}
+
+function buildSearch(query) {
+    var search_terms = [];
+
+    for (var k in query) {
+        var term = {};
+        term[k] = query[k];
+        search_terms.push({match: term});
+    }
+
+    return search_terms;
+}
