@@ -5,14 +5,12 @@ var server = new Hapi.Server(config.port);
 var routes = require('./routes');
 
 server.pack.register([
-	{ plugin: require('lout') },
-	{
-		plugin: require('hapi-route-directory'),
-		options: {
-			path: '/',
-			lout: false
-		}
-	}
+	{plugin: require('lout'),
+	 options: {
+		 basePath: './templates',
+
+	 }},
+	{plugin: require('hapi-route-directory')}
 ],
 function (err) {
 	if (err) {

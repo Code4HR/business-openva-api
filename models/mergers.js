@@ -1,7 +1,7 @@
 var Joi = require('joi');
 
 module.exports = {
-    corp_id: Joi.string(),
+    id: Joi.string(),
     type: Joi.string(),
     date: Joi.date(),
     survivor_id: Joi.string(),

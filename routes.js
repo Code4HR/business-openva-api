@@ -30,8 +30,11 @@ function getBusinesses(request, reply) {
         for(var i = 0; i < hits.length; i++)
         {
             matches[i] = {};
-            matches[i].name = hits[i]["_source"]["name"];
-            matches[i].city = hits[i]["_source"]["city"];
+            for (var k in models.businesses) {
+                if(hits[i]["_source"].hasOwnProperty(k)) {
+                    matches[i][k] = hits[i]["_source"][k];
+                }
+            }
         }
         reply(matches);
     }, function (err) {
@@ -40,15 +43,96 @@ function getBusinesses(request, reply) {
 }
 
 function getAmendments(request, reply) {
+    var search_terms = buildSearch(request.query);
 
+    db.search({
+        index: 'business',
+        type: '4',
+        body: {
+            query: {
+                bool: {
+                    must: search_terms
+                }
+            }
+        }
+    }).then(function (resp) {
+        var hits = resp.hits.hits;
+        var matches = [];
+        for(var i = 0; i < hits.length; i++)
+        {
+            matches[i] = {};
+            for (var k in models.amendments) {
+                if(hits[i]["_source"].hasOwnProperty(k)) {
+                    matches[i][k] = hits[i]["_source"][k];
+                }
+            }
+        }
+        reply(matches);
+    }, function (err) {
+        console.trace(err.message);
+    });
 }
 
 function getMergers(request, reply) {
+    var search_terms = buildSearch(request.query);
 
+    db.search({
+        index: 'business',
+        type: '7',
+        body: {
+            query: {
+                bool: {
+                    must: search_terms
+                }
+            }
+        }
+    }).then(function (resp) {
+        var hits = resp.hits.hits;
+        var matches = [];
+        for(var i = 0; i < hits.length; i++)
+        {
+            matches[i] = {};
+            for (var k in models.mergers) {
+                if(hits[i]["_source"].hasOwnProperty(k)) {
+                    matches[i][k] = hits[i]["_source"][k];
+                }
+            }
+        }
+        reply(matches);
+    }, function (err) {
+        console.trace(err.message);
+    });
 }
 
 function getOfficers(request, reply) {
+    var search_terms = buildSearch(request.query);
 
+    db.search({
+        index: 'business',
+        type: '5',
+        body: {
+            query: {
+                bool: {
+                    must: search_terms
+                }
+            }
+        }
+    }).then(function (resp) {
+        var hits = resp.hits.hits;
+        var matches = [];
+        for(var i = 0; i < hits.length; i++)
+        {
+            matches[i] = {};
+            for (var k in models.officers) {
+                if(hits[i]["_source"].hasOwnProperty(k)) {
+                    matches[i][k] = hits[i]["_source"][k];
+                }
+            }
+        }
+        reply(matches);
+    }, function (err) {
+        console.trace(err.message);
+    });
 }
 
 function buildSearch(query) {
