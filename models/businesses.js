@@ -24,5 +24,11 @@ module.exports = {
     industry: Joi.string(),
     state_formed: Joi.string(),
     status: Joi.string(),
-    status_date: Joi.date()
+    status_date: Joi.date(),
+    domestic: Joi.string(),
+    foreign: Joi.string(),
+    merged: Joi.string(),
+    number_shares: Joi.number(),
+    total_shares: Joi.number(),
+    stock_ind: Joi.string()
 }

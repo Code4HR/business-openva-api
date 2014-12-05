@@ -7,8 +7,7 @@ var routes = require('./routes');
 server.pack.register([
 	{plugin: require('lout'),
 	 options: {
-		 basePath: './templates',
-
+		 basePath: './templates'
 	 }},
 	{plugin: require('hapi-route-directory')}
 ],

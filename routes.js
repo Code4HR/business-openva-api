@@ -12,34 +12,7 @@ module.exports = [
 ];
 
 function getBusinesses(request, reply) {
-    var search_terms = buildSearch(request.query);
-
-    db.search({
-        index: 'business',
-        type: '2,3,6,8,9',
-        body: {
-            query: {
-                bool: {
-                    must: search_terms
-                }
-            }
-        }
-    }).then(function (resp) {
-        var hits = resp.hits.hits;
-        var matches = [];
-        for(var i = 0; i < hits.length; i++)
-        {
-            matches[i] = {};
-            for (var k in models.businesses) {
-                if(hits[i]["_source"].hasOwnProperty(k)) {
-                    matches[i][k] = hits[i]["_source"][k];
-                }
-            }
-        }
-        reply(matches);
-    }, function (err) {
-        console.trace(err.message);
-    });
+    reply(buildSearch(request.query,'2,3,6,8,9',models.businesses));
 }
 
 function getAmendments(request, reply) {
@@ -135,14 +108,44 @@ function getOfficers(request, reply) {
     });
 }
 
-function buildSearch(query) {
-    var search_terms = [];
+function buildSearch(query,type,model) {
+    var query_params = [];
+    var filters = [];
+    var search_query = {};
+    var matches = [];
 
     for (var k in query) {
         var term = {};
         term[k] = query[k];
-        search_terms.push({match: term});
+        if (k == "id") {
+            filters.push({exists: term});
+        } else {
+            query_params.push({match: term});
+        }
     }
 
-    return search_terms;
+    search_query.index = 'business';
+    search_query.type = type;
+    search_query.body = {};
+    if (query_params.length > 0) {
+        search_query.body.query = {bool: {must: query_params}};
+    }
+    if (filters.length > 0) {
+        search_query.body.filters = filters;
+    }
+
+    db.search(search_query).then(function(body) {
+        var hits = body.hits.hits;
+        for (var i = 0; i < hits.length; i++) {
+            matches[i] = {};
+            for (var k in model) {
+                if (hits[i]["_source"].hasOwnProperty(k)) {
+                    matches[i][k] = hits[i]["_source"][k];
+                }
+            }
+        }
+        console.log(matches);
+    }, function (err) {
+        console.trace(err.message);
+    }).then();
 }
