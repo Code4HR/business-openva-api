@@ -1,6 +1,7 @@
 var Joi = require('joi');
+var officers = require('./officers');
 
-module.exports = {
+module.exports = Joi.object().keys({
     id: Joi.string(),
     name: Joi.string(),
     street_1: Joi.string(),
@@ -8,7 +9,8 @@ module.exports = {
     city: Joi.string(),
     state: Joi.string(),
     zip: Joi.string(),
-    coordinates: Joi.array().includes(Joi.number()).min(2).max(2),
+    coordinates: Joi.array().includes(Joi.number(), Joi.number()).min(2).max(2),
+    dist: Joi.number(),
     address_date: Joi.date(),
     agent_name: Joi.string(),
     agent_street_1: Joi.string(),
@@ -31,4 +33,4 @@ module.exports = {
     number_shares: Joi.number(),
     total_shares: Joi.number(),
     stock_ind: Joi.string()
-}
+}).with('coordinates', 'dist');
