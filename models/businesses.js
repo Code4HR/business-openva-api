@@ -1,5 +1,4 @@
 var Joi = require('joi');
-var officers = require('./officers');
 
 module.exports = Joi.object().keys({
     id: Joi.string(),

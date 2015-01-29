@@ -2,7 +2,6 @@
   "host": "localhost",
   "port": 3000,
   "elasticSearch": {
-    "host": "127.0.0.1:9200",
-    "log": "trace"
+    "host": "127.0.0.1:9200"
   }
 }
