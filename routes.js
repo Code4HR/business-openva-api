@@ -78,8 +78,6 @@ function getMergers(request, reply) {
             })
             .then(function(res) {
                 for (var i = 0; i < data.length; i++) {
-                    console.log(res[i * 2]);
-                    console.log(res[i * 2 + 1]);
                     if(res[i * 2].length > 0) {
                         data[i].name = res[i * 2][0].name;
                     }
