@@ -40,21 +40,79 @@ function getBusinesses(request, reply) {
 }
 
 function getAmendments(request, reply) {
-    buildSearch(request.query,'4',models.amendments, function(resp) {
-        reply(resp);
-    });
+    var data = {};
+    buildSearch(request.query,'4',models.amendments)
+        .then(function(res) {
+            data = res;
+            var addtlData = [];
+            for (var i = 0; i < res.length; i++) {
+                var query = {id: res[i].id.toString()};
+                addtlData.push(buildSearch(query, '2,3,6,8,9', models.businesses));
+            }
+            return Q.all(addtlData);
+        })
+        .then(function(res) {
+            for (var i = 0; i < data.length; i++) {
+                if(res[i].length > 0) {
+                    data[i].name = res[i][0].name;
+                }
+            }
+            return data;
+        })
+        .done(function(data) {reply(data);});
 }
 
 function getMergers(request, reply) {
-    buildSearch(request.query,'7',models.mergers, function(resp) {
-        reply(resp);
-    });
+        var data = {};
+        buildSearch(request.query,'7',models.mergers)
+            .then(function(res) {
+                data = res;
+                var addtlData = [];
+                for (var i = 0; i < res.length; i++) {
+                    var query = {id: res[i].id.toString()};
+                    var surv_query = {id: res[i].survivor_id.toString()};
+                    addtlData.push(buildSearch(query, '2,3,6,8,9', models.businesses));
+                    addtlData.push(buildSearch(surv_query, '2,3,6,8,9', models.businesses));
+                }
+                return Q.all(addtlData);
+            })
+            .then(function(res) {
+                for (var i = 0; i < data.length; i++) {
+                    console.log(res[i * 2]);
+                    console.log(res[i * 2 + 1]);
+                    if(res[i * 2].length > 0) {
+                        data[i].name = res[i * 2][0].name;
+                    }
+                    if(res[i * 2 + 1].length > 0) {
+                        data[i].survivor_name = res[i * 2 + 1][0].name;
+                    }
+                }
+                return data;
+            })
+            .done(function(data) {reply(data);});
 }
 
 function getOfficers(request, reply) {
-    buildSearch(request.query,'5',models.officers, function(resp) {
-        reply(resp);
-    });
+        var data = {};
+        buildSearch(request.query,'5',models.officers)
+            .then(function(res) {
+                data = res;
+                var addtlData = [];
+                for (var i = 0; i < res.length; i++) {
+                    var query = {id: res[i].id.toString()};
+                    addtlData.push(buildSearch(query, '2,3,6,8,9', models.businesses));
+                }
+                return Q.all(addtlData);
+            })
+            .then(function(res) {
+                for (var i = 0; i < data.length; i++) {
+                    if(res[i].length > 0) {
+                        data[i].business_name = res[i][0].name;
+                    }
+                }
+                return data;
+            })
+            .done(function(data) {reply(data);});
 }
 
 function buildSearch(query, type, model) {
