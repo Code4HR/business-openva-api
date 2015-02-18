@@ -1,7 +1,8 @@
 var config = require('./config.json');
 
 var Hapi = require('hapi');
-var server = new Hapi.Server(config.port);
+var server = new Hapi.Server(config.host, config.port);
+
 var routes = require('./routes');
 
 server.pack.register([
@@ -22,4 +23,5 @@ server.route(routes);
 
 server.start(function () {
 	console.log('Server running at: ', server.info.uri);
+    server.log
 });
