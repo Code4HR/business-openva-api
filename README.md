@@ -8,9 +8,8 @@ To reproduce the data set:
 1. Download and install [Elasticsearch] (http://www.elasticsearch.org)
 2. Start your Elasticsearch server
 3. Clone [Crump] (https://github.com/openva/crump)
-4. Download the [current data file] (https://s3.amazonaws.com/virginia-business/current.zip) and [the current address file] (https://s3.amazonaws.com/virginia-business/current.zip)
-or alternatively use Crump to download it
-5. Run `./Crump -tem`. If you want Crump to download the data for you add the -d option (i.e. `-tedm`)
+4. Download the [current data file] (https://s3.amazonaws.com/virginia-business/current.zip) and [the current address file] (https://s3.amazonaws.com/virginia-business/addresses.db) and put it in the crump folder.
+5. In a console `cd` into the folder where you cloned Crump and run `./Crump -tem`.
 6. Run [the indexing script] (https://github.com/openva/vabusinesses.org/blob/master/index.sh), changing the directory to the location where you ran Crump.
 
 To install the API:
