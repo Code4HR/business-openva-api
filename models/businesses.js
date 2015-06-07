@@ -31,6 +31,8 @@ module.exports = Joi.object().keys({
     merged: Joi.string(),
     number_shares: Joi.number(),
     total_shares: Joi.number(),
-    stock_ind: Joi.string()
+    stock_ind: Joi.string(),
+    start: Joi.number(),
+    limit: Joi.number()
 });
     //.with('coordinates', 'dist');

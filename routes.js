@@ -13,13 +13,14 @@ module.exports = [
 ];
 
 function getBusinesses(request, reply) {
-    var data = {};
+    var data = {results: 0, businesses: []};
     buildSearch(request.query,'2,3,6,8,9',models.businesses)
         .then(function(res) {
-            data = res;
+            data.businesses = res.matches;
+            data.results = res.hits;
             var addtlData = [];
-            for (var i = 0; i < res.length; i++) {
-                var query = {id: res[i].id.toString()};
+            for (var i = 0; i < res.matches.length; i++) {
+                var query = {id: res.matches[i].id.toString()};
                 addtlData.push(
                     buildSearch(query, '4', models.amendments),
                     buildSearch(query, '7', models.mergers),
@@ -29,38 +30,43 @@ function getBusinesses(request, reply) {
             return Q.all(addtlData);
         })
         .then(function(res) {
+            console.log(res);
                 for (var i = 0; i < data.length; i++) {
-                    data[i].amendments = res[i * 3];
-                    data[i].mergers = res[i * 3 + 1];
-                    data[i].officers = res[i * 3 + 2];
+                    data.businesses[i].amendments = res[i * 3].matches;
+                    data.businesses[i].mergers = res[i * 3 + 1].matches;
+                    data.businesses[i].officers = res[i * 3 + 2].matches;
                 }
                 return data;
         })
-        .done(function(data) {reply(data);})
+        .done(function(data) {
+            reply(data);
+        })
 }
 
 function getAmendments(request, reply) {
-    var data = {};
+    var data = {results: 0, amendments: []};
     buildSearch(request.query,'4',models.amendments)
         .then(function(res) {
-            data = res;
+            data.amendments = res.matches;
+            data.results = res.hits;
             var addtlData = [];
-            for (var i = 0; i < res.length; i++) {
-                var query = {id: res[i].id.toString()};
+            for (var i = 0; i < res.matches.length; i++) {
+                var query = {id: res.matches[i].id.toString()};
                 addtlData.push(buildSearch(query, '2,3,6,8,9', models.businesses));
             }
             return Q.all(addtlData);
         })
         .then(function(res) {
-            for (var i = 0; i < data.length; i++) {
-                if(res[i].length > 0) {
-                    data[i].name = res[i][0].name;
+            for (var i = 0; i < data.amendments.length; i++) {
+                if(res[i].matches.length > 0) {
+                    data.amendments[i].name = res[i].matches[0].name;
                 }
             }
             return data;
         })
         .done(function(data) {reply(data);});
 }
+
 
 function getMergers(request, reply) {
         var data = {};
@@ -90,6 +96,7 @@ function getMergers(request, reply) {
             .done(function(data) {reply(data);});
 }
 
+//@todo this is still broken
 function getOfficers(request, reply) {
         var data = {};
         buildSearch(request.query,'5',models.officers)
@@ -113,14 +120,16 @@ function getOfficers(request, reply) {
             .done(function(data) {reply(data);});
 }
 
+//@todo move build search to own class and test
 function buildSearch(query, type, model) {
+    var notAddedToQuery = ['coordinates', 'dist', 'start', 'limit'];
     var query_params = [];
     var search_query = {};
     var matches = [];
     var deferred = Q.defer();
 
     for (var k in query) {
-        if (!(k === 'coordinates'|| k === 'dist')) {
+        if (notAddedToQuery.indexOf(k) === -1) {
             var term = {};
             term[k] = query[k];
             query_params.push({match: term});
@@ -128,6 +137,8 @@ function buildSearch(query, type, model) {
     }
 
     search_query.index = 'business';
+    search_query.from = query.start || 0;
+    search_query.size = query.limit || 10;
     search_query.type = type;
     search_query.body = {};
 
@@ -157,10 +168,12 @@ function buildSearch(query, type, model) {
                 }
             }
         }
-        deferred.resolve(matches);
+        var response = {hits: body.hits.total, matches: matches};
+        deferred.resolve(response);
     }, function (err) {
         deferred.reject(err);
         console.trace(err.message);
     });
     return deferred.promise;
 }
+
