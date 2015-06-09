@@ -5,5 +5,7 @@ module.exports = Joi.object().keys({
     title: Joi.string(),
     first_name: Joi.string(),
     middle_name: Joi.string(),
-    last_name: Joi.string()
+    last_name: Joi.string(),
+    start: Joi.number(),
+    limit: Joi.number()
 });

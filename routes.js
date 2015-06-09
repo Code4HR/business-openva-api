@@ -69,26 +69,27 @@ function getAmendments(request, reply) {
 
 
 function getMergers(request, reply) {
-        var data = {};
+        var data = {results: 0, mergers: []};
         buildSearch(request.query,'7',models.mergers)
             .then(function(res) {
-                data = res;
+                data.mergers = res.matches;
+                data.results = res.hits;
                 var addtlData = [];
-                for (var i = 0; i < res.length; i++) {
-                    var query = {id: res[i].id.toString()};
-                    var surv_query = {id: res[i].survivor_id.toString()};
+                for (var i = 0; i < res.matches.length; i++) {
+                    var query = {id: res.matches[i].id.toString()};
+                    var surv_query = {id: res.matches[i].survivor_id.toString()};
                     addtlData.push(buildSearch(query, '2,3,6,8,9', models.businesses));
                     addtlData.push(buildSearch(surv_query, '2,3,6,8,9', models.businesses));
                 }
                 return Q.all(addtlData);
             })
             .then(function(res) {
-                for (var i = 0; i < data.length; i++) {
-                    if(res[i * 2].length > 0) {
-                        data[i].name = res[i * 2][0].name;
+                for (var i = 0; i < data.mergers.length; i++) {
+                    if(res[i * 2].matches.length > 0) {
+                        data.mergers[i].name = res[i * 2].matches[0].name;
                     }
-                    if(res[i * 2 + 1].length > 0) {
-                        data[i].survivor_name = res[i * 2 + 1][0].name;
+                    if(res[i * 2 + 1].matches.length > 0) {
+                        data.mergers[i].survivor_name = res[i * 2 + 1].matches[0].name;
                     }
                 }
                 return data;
@@ -96,23 +97,23 @@ function getMergers(request, reply) {
             .done(function(data) {reply(data);});
 }
 
-//@todo this is still broken
 function getOfficers(request, reply) {
-        var data = {};
+        var data = {results: 0, officers: []};
         buildSearch(request.query,'5',models.officers)
             .then(function(res) {
-                data = res;
+                data.officers = res.matches;
+                data.results = res.hits;
                 var addtlData = [];
-                for (var i = 0; i < res.length; i++) {
-                    var query = {id: res[i].id.toString()};
+                for (var i = 0; i < res.matches.length; i++) {
+                    var query = {id: res.matches[i].id.toString()};
                     addtlData.push(buildSearch(query, '2,3,6,8,9', models.businesses));
                 }
                 return Q.all(addtlData);
             })
             .then(function(res) {
-                for (var i = 0; i < data.length; i++) {
-                    if(res[i].length > 0) {
-                        data[i].business_name = res[i][0].name;
+                for (var i = 0; i < data.officers.length; i++) {
+                    if(res[i].matches.length > 0) {
+                        data.officers[i].business_name = res[i].matches[0].name;
                     }
                 }
                 return data;
