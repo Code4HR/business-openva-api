@@ -6,5 +6,7 @@ module.exports = Joi.object().keys({
     date: Joi.date(),
     survivor_id: Joi.string(),
     survivor_qualified: Joi.boolean(),
-    unqualified_name: Joi.string()
+    unqualified_name: Joi.string(),
+    start: Joi.number(),
+    limit: Joi.number()
 });
