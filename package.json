@@ -4,10 +4,10 @@
   "description": "An API for OpenVA SCC Business Records DB",
   "main": "api.js",
   "dependencies": {
-    "elasticsearch": "^3.0.0",
-    "hapi": "^7.3.0",
+    "elasticsearch": "^12.0.0",
+    "hapi": "^17.0.0",
     "hapi-route-directory": "0.0.4",
-    "joi": "^4.7.0",
+    "joi": "^13.0.0",
     "lout": "^5.1.1",
     "q": "^1.1.2"
   },
