@@ -5,15 +5,18 @@
   "main": "api.js",
   "dependencies": {
     "elasticsearch": "^3.0.0",
-    "hapi": "^7.3.0",
+    "hapi": "^13.4.0",
     "hapi-route-directory": "0.0.4",
-    "joi": "^4.7.0",
-    "lout": "^5.1.1",
-    "q": "^1.1.2"
+    "joi": "^8.1.0",
+    "lout": "^9.0.1",
+    "q": "^1.1.2",
+    "snyk": "^1.83.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -34,5 +37,6 @@
   "bugs": {
     "url": "https://github.com/Code4HR/business-openva-api/issues"
   },
-  "homepage": "https://github.com/Code4HR/business-openva-api"
+  "homepage": "https://github.com/Code4HR/business-openva-api",
+  "snyk": true
 }
