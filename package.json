@@ -8,7 +8,7 @@
     "hapi": "^7.3.0",
     "hapi-route-directory": "0.0.4",
     "joi": "^4.7.0",
-    "lout": "^5.1.1",
+    "lout": "^7.1.0",
     "q": "^1.1.2"
   },
   "devDependencies": {},
